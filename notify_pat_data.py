@@ -18,7 +18,7 @@ sf_config = {
 }
 
 # --- Step 2: Connect to Snowflake ---
-print("⏳ Connecting to Snowflake...")
+print("Connecting to Snowflake...")
 session = Session.builder.configs(sf_config).create()
 
 # --- Step 3: Load PAT_EXPIRY_LOG data ---
@@ -35,20 +35,20 @@ df["NOTIFIED_ON"] = pd.to_datetime(df["NOTIFIED_ON"], errors="coerce")
 expiring_soon = df[df["EXPIRES_AT"].notna() & (df["EXPIRES_AT"] <= cutoff) & (df["EXPIRES_AT"] >= now)].copy()
 
 if expiring_soon.empty:
-    print("✅ No PATs expiring in the next 7 days.")
+    print("No PATs expiring in the next 7 days.")
     exit(0)
 
 # --- Step 5: Format email body ---
-message_lines = ["🔐 *PAT Tokens Expiring Within 7 Days:*\n"]
+message_lines = ["*PAT Tokens Expiring Within 7 Days:*\n"]
 for _, row in expiring_soon.iterrows():
     message_lines.append(
-        f"- 👤 User: {row['USER_NAME']}, 🔑 Token: {row['TOKEN_NAME']}, ⏰ Expires: {row['EXPIRES_AT']:%Y-%m-%d %H:%M UTC}"
+        f"- User Name: {row['USER_NAME']} | Token Name: {row['TOKEN_NAME']} | Expires: {row['EXPIRES_AT']:%Y-%m-%d %H:%M UTC}"
     )
 
 email_body = "\n".join(message_lines)
 
 # --- Step 6: Send Email via SNS ---
-print("📤 Sending email notification via AWS SNS...")
+print("Sending email notification via AWS SNS...")
 
 sns = boto3.client(
     'sns',
@@ -59,7 +59,7 @@ sns = boto3.client(
 
 sns.publish(
     TopicArn=SNS_TOPIC_ARN,
-    Subject="⚠️ Snowflake PAT Tokens Expiring Soon",
+    Subject="Snowflake PAT Tokens Expiring Soon",
     Message=email_body
 )
 
