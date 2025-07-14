@@ -1,15 +1,12 @@
-name: Refresh PAT Tokens
+name: Refresh & Notify PAT Tokens
 
 on:
-  # ⏱ Scheduled daily at 01:00 UTC
   schedule:
-    - cron: "0 1 * * *"
-
-  # 🖐 Manual trigger from GitHub UI
+    - cron: "0 1 * * *"  # daily at 01:00 UTC
   workflow_dispatch:
 
 jobs:
-  refresh-pat:
+  refresh-notify:
     runs-on: ubuntu-latest
 
     env:
@@ -20,6 +17,10 @@ jobs:
       SNOWFLAKE_DATABASE: ${{ secrets.SNOWFLAKE_DATABASE }}
       SNOWFLAKE_SCHEMA: ${{ secrets.SNOWFLAKE_SCHEMA }}
       SNOWFLAKE_ROLE: ${{ secrets.SNOWFLAKE_ROLE }}
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+      SNS_TOPIC_ARN: ${{ secrets.SNS_TOPIC_ARN }}
 
     steps:
       - name: 📁 Checkout repository
@@ -32,7 +33,10 @@ jobs:
 
       - name: 📦 Install dependencies
         run: |
-          pip install snowflake-connector-python
+          pip install snowflake-connector-python boto3
 
-      - name: 🔄 Run PAT refresh script
-        run: python notify_pat_data.py
+      - name: 🔄 Refresh PAT Token Data
+        run: python refresh_pat_data.py
+
+      - name: 📧 Send Email Notifications
+        run: python notify_pat_expiry.py
