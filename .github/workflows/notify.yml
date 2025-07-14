@@ -2,7 +2,8 @@ name: Notify PAT Expiry
 
 on:
   schedule:
-    - cron: "*/7 * * * *"   # 🕐 Run daily at 01:05 UTC
+    #- cron: "*/7 * * * *"   # 🕐 Run daily at 01:05 UTC
+    - cron: "0 0 1 1 *"
   workflow_dispatch:       # 🖐 Allow manual trigger
 
 jobs:
