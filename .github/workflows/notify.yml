@@ -37,6 +37,7 @@ jobs:
       - name: 📦 Install dependencies
         run: |
           pip install snowflake-connector-python boto3 pandas
+          pip install "snowflake-snowpark-python[pandas]" boto3
       
 
       - name: 📧 Run SNS Notification Script
