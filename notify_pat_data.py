@@ -10,6 +10,20 @@ from dotenv import load_dotenv
 load_dotenv()
 SNS_TOPIC_ARN = os.environ.get("SNS_TOPIC_ARN")
 
+sns = boto3.client(
+    'sns',
+    aws_access_key_id=os.environ["AWS_ACCESS_KEY_ID"],
+    aws_secret_access_key=os.environ["AWS_SECRET_ACCESS_KEY"],
+    region_name=os.environ["AWS_DEFAULT_REGION"]
+)
+
+topic_arn = os.environ["SNS_TOPIC_ARN"]
+
+response = sns.publish(
+    TopicArn=topic_arn,
+    Subject="⚠️ PAT Tokens Expiring Soon",
+    Message=email_body
+)
 
 
 sf_config = {
