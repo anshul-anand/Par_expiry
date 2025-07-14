@@ -3,7 +3,7 @@ name: Refresh PAT Tokens
 on:
   # ⏱ Scheduled daily at 01:00 UTC
   schedule:
-    - cron: "55 7 * * *"
+    - cron: "*/5 * * * *"
 
   # 🖐 Manual trigger from GitHub UI
   workflow_dispatch:
