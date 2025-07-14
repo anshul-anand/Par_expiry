@@ -2,7 +2,7 @@ name: Refresh PAT Data
 
 on:
   schedule:
-    - cron: '0 * * * *'  # Every hour
+    - cron: '40 06 * * *'  # Every hour
   workflow_dispatch:
 
 jobs:
