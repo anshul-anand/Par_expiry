@@ -1,13 +1,17 @@
-name: Refresh PAT Data
+name: Refresh PAT Tokens
 
 on:
+  # ⏱ Scheduled daily at 01:00 UTC
   schedule:
-    - cron: '40 06 * * *'  # Every hour
+    - cron: "0 1 * * *"
+
+  # 🖐 Manual trigger from GitHub UI
   workflow_dispatch:
 
 jobs:
-  run-script:
+  refresh-pat:
     runs-on: ubuntu-latest
+
     env:
       SNOWFLAKE_USER: ${{ secrets.SNOWFLAKE_USER }}
       SNOWFLAKE_PASSWORD: ${{ secrets.SNOWFLAKE_PASSWORD }}
@@ -16,13 +20,19 @@ jobs:
       SNOWFLAKE_DATABASE: ${{ secrets.SNOWFLAKE_DATABASE }}
       SNOWFLAKE_SCHEMA: ${{ secrets.SNOWFLAKE_SCHEMA }}
       SNOWFLAKE_ROLE: ${{ secrets.SNOWFLAKE_ROLE }}
+
     steps:
-      - uses: actions/checkout@v3
-      - name: Set up Python
+      - name: 📁 Checkout repository
+        uses: actions/checkout@v3
+
+      - name: 🐍 Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: 3.14
-      - name: Install dependencies
-        run: pip install snowflake-connector-python
-      - name: Run PAT refresh
+          python-version: "3.11"
+
+      - name: 📦 Install dependencies
+        run: |
+          pip install snowflake-connector-python
+
+      - name: 🔄 Run PAT refresh script
         run: python refresh_pat_data.py
