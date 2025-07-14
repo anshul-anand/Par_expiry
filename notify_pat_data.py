@@ -3,11 +3,11 @@ import boto3
 import pandas as pd
 from snowflake.snowpark import Session
 from datetime import datetime, timedelta
-from dotenv import load_dotenv
+
 
 # --- Load AWS and Snowflake credentials from env ---
 
-load_dotenv()
+
 SNS_TOPIC_ARN = os.environ.get("SNS_TOPIC_ARN")
 
 sns = boto3.client(
