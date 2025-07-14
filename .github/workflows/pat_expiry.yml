@@ -6,7 +6,7 @@ on:
     - cron: "0 0 1 1 *"
     #- cron: "*/5 * * * *"
 
-  # 🖐 Manual trigger from GitHub UI
+  # Manual trigger from GitHub UI
   workflow_dispatch:
 
 jobs:
@@ -23,17 +23,17 @@ jobs:
       SNOWFLAKE_ROLE: ${{ secrets.SNOWFLAKE_ROLE }}
 
     steps:
-      - name: 📁 Checkout repository
+      - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: 🐍 Set up Python
+      - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: "3.11"
 
-      - name: 📦 Install dependencies
+      - name: Install dependencies
         run: |
           pip install snowflake-connector-python
 
-      - name: 🔄 Run PAT refresh script
+      - name: Run PAT refresh script
         run: python refresh_pat_data.py
