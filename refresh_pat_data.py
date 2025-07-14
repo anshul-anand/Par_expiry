@@ -2,7 +2,7 @@ name: Refresh PAT Tokens
 
 on:
   schedule:
-    - cron: "0 1 * * *"  # every day at 01:00 UTC
+    - cron: "40 06 * * *"  # every day at 01:00 UTC
   workflow_dispatch:
 
 jobs:
