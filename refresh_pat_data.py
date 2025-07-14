@@ -55,14 +55,14 @@ def insert_pat_if_not_exists(cursor, token, user):
     return True
 
 def main():
-    print("⏳ Connecting to Snowflake...")
+    print("Connecting to Snowflake...")
     conn = connect_to_snowflake()
     cursor = conn.cursor()
     inserted_count = 0
 
     try:
         users = fetch_users_with_pats(cursor)
-        print(f"👤 Found {len(users)} users with PATs")
+        print(f"Found {len(users)} users with PATs")
 
         for user in users:
             tokens = fetch_user_tokens(cursor, user)
@@ -70,11 +70,11 @@ def main():
                 if insert_pat_if_not_exists(cursor, token, user):
                     inserted_count += 1
 
-        print(f"✅ Done! Inserted {inserted_count} new PAT tokens.")
+        print(f"Done! Inserted {inserted_count} new PAT tokens.")
         conn.commit()
 
     except Exception as e:
-        print(f"❌ Error: {e}")
+        print(f"Error: {e}")
         conn.rollback()
 
     finally:
