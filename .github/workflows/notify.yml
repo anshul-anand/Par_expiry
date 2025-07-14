@@ -2,16 +2,16 @@ name: Notify PAT Expiry
 
 on:
   schedule:
-    #- cron: "*/7 * * * *"   # 🕐 Run daily at 01:05 UTC
+    #- cron: "*/7 * * * *"   # Run daily at 01:05 UTC
     - cron: "0 0 1 1 *"
-  workflow_dispatch:       # 🖐 Allow manual trigger
+  workflow_dispatch:       # Allow manual trigger
 
 jobs:
   notify:
     runs-on: ubuntu-latest
 
     env:
-      # 🧊 Snowflake credentials
+      # Snowflake credentials
       SNOWFLAKE_USER: ${{ secrets.SNOWFLAKE_USER }}
       SNOWFLAKE_PASSWORD: ${{ secrets.SNOWFLAKE_PASSWORD }}
       SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
@@ -20,26 +20,26 @@ jobs:
       SNOWFLAKE_SCHEMA: ${{ secrets.SNOWFLAKE_SCHEMA }}
       SNOWFLAKE_ROLE: ${{ secrets.SNOWFLAKE_ROLE }}
 
-      # 🔐 AWS SNS credentials
+      # AWS SNS credentials
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
       SNS_TOPIC_ARN: ${{ secrets.SNS_TOPIC_ARN }}
 
     steps:
-      - name: 📁 Checkout repository
+      - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: 🐍 Set up Python
+      - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: "3.11"
 
-      - name: 📦 Install dependencies
+      - name: Install dependencies
         run: |
           pip install snowflake-connector-python boto3 pandas
           pip install "snowflake-snowpark-python[pandas]" boto3
       
 
-      - name: 📧 Run SNS Notification Script
+      - name: Run SNS Notification Script
         run: python notify_pat_data.py
